@@ -1,1 +1,1 @@
-This folder is for all files in package projectView.
+This folder is for all files in package projectview.
