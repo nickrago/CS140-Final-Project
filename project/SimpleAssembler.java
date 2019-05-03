@@ -76,5 +76,33 @@ public class SimpleAssembler implements Assembler{
 				.map(line -> line.split("\\s+"))
 				.map(this::makeData)
 				.collect(Collectors.toList());
+		System.out.println(outputCode);
+		System.out.println(outputData);
+		try (DataOutputStream out = new DataOutputStream(new FileOutputStream(new File(outputFileName)))){
+			for(Instruction instr: outputCode)
+			{
+				out.writeInt(instr.opcode);
+				out.writeInt(instr.arg);
+				out.writeInt(-1);
+				out.close();
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+	
+	public static void main(String[] args) {
+	    StringBuilder error = new StringBuilder();
+	    System.out.println("Enter the name of the file without extension: ");
+	// TYPE IN factorial
+	    try (Scanner keyboard = new Scanner(System.in)) { 
+	        String filename = keyboard.nextLine();
+	        int i = new SimpleAssembler().assemble(filename + ".pasm", 
+	                filename + ".pexe", error);
+	        System.out.println("result = " + i);
+	  }
 	}
 }
