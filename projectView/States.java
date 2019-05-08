@@ -78,29 +78,29 @@ public enum States {
 	private static final int STEP = 6; 	
 	boolean[] states = new boolean[7];
 	abstract void enter();
-	
+
 	public boolean getAssembleFileActive() {
-	    return states[ASSEMBLE];
+		return states[ASSEMBLE];
 	}
 	public boolean getClearActive() {
-	    return states[CLEAR];
+		return states[CLEAR];
 	}
 	public boolean getLoadFileActive() {
-	    return states[LOAD];
+		return states[LOAD];
 	}
 	public boolean getReloadActive() {
-	    return states[RELOAD];
+		return states[RELOAD];
 	}
 	public boolean getRunningActive() {
-	    return states[RUNNING];
+		return states[RUNNING];
 	}
 	public boolean getRunPauseActive() {
-	    return states[RUN];
+		return states[RUN];
 	}
 	public boolean getStepActive() {
-	    return states[STEP];
+		return states[STEP];
 	}
-	
+
 	public class Mediator
 	{
 		private Machine machine;
@@ -116,7 +116,7 @@ public enum States {
 			return frame;
 		};
 	}
-	
+
 	public class MemoryViewPanel
 	{
 		private Machine machine; // import from project
@@ -126,21 +126,21 @@ public enum States {
 		private int lower = -1;
 		private int upper = -1;
 		private int previousColor = -1;
-		
+
 		public MemoryViewPanel(Machine m, int low, int up) {
 			machine = m;
 			lower = low;
 			upper = up;
 		}
-		
+
 		public JComponent createMemoryDisplay()
 		{
 			JPanel panel = new JPanel();
 			panel.setLayout(new BorderLayout());
 			Border border = BorderFactory.createTitledBorder(
-			        BorderFactory.createLineBorder(Color.BLACK),
-			        "Data Memory View ["+ lower +"-"+ upper +"]",
-			        TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION);
+					BorderFactory.createLineBorder(Color.BLACK),
+					"Data Memory View ["+ lower +"-"+ upper +"]",
+					TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION);
 			panel.setBorder(border);
 			JPanel innerPanel = new JPanel();
 			innerPanel.setLayout(new BorderLayout());
@@ -166,7 +166,7 @@ public enum States {
 			panel.add(scroller);
 			return panel;
 		}
-			public void update(String str) {
+		public void update(String str) {
 			for(int i = lower; i < upper; i++) {
 				int val = machine.getData(i);
 				dataDecimal[i-lower].setText("" + val);
@@ -204,4 +204,17 @@ public enum States {
 			}
 		}
 	}
+
+	/*	public static void main(String[] args) {
+		Machine machine = new Machine(() -> System.exit(0));
+		MemoryViewPanel panel = new MemoryViewPanel(machine, 0, 500);
+		JFrame frame = new JFrame("TEST");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(400, 700);
+		frame.setLocationRelativeTo(null);
+		frame.add(panel.createMemoryDisplay());
+		frame.setVisible(true);
+		System.out.println(Loader.load(machine, new File("test.pexe")));
+		panel.update("");
+	}*/
 }
