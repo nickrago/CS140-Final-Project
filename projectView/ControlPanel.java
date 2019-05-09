@@ -54,8 +54,11 @@ public class ControlPanel {
 		return panel;
 	}
 
-	public void update()
-	{
-
+	//@Override
+	public void update() {
+		runButton.setEnabled(mediator.getCurrentState().getRunPauseActive());
+		stepButton.setEnabled(mediator.getCurrentState().getStepActive());
+		clearButton.setEnabled(mediator.getCurrentState().getClearActive());
+		reloadButton.setEnabled(mediator.getCurrentState().getReloadActive());		
 	}
 }

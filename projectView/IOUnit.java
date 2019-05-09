@@ -14,6 +14,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import project.Assembler;
 import project.Loader;
 import project.Machine;
+import projectview.States.Mediator;
 import project.FullAssembler;
 
 public class IOUnit {
@@ -24,7 +25,8 @@ public class IOUnit {
 	private String executableDir; 
 	private Properties properties = null;
 	private File currentlyExecutingFile;
-	private Assembler assembler = new FullAssembler(); 
+	//private Assembler assembler = new SimpleAssembler(); 
+	private Assembler assembler = new FullAssembler();
 
 	public IOUnit(Mediator view) {
 		mediator = view;

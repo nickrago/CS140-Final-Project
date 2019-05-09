@@ -21,8 +21,10 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
+import project.CodeAccessException;
 import project.DivideByZeroException;
 import project.IllegalInstructionException;
+import project.Loader;
 //import project.Loader;
 import project.Machine;
 import project.Memory;
@@ -125,46 +127,65 @@ public enum States {
 		private MenuBarBuilder menuBuilder;
 
 		public void step() { 
-			if (currentState != States.PROGRAM_HALTED && 
+			while (currentState != States.PROGRAM_HALTED && 
 					currentState != States.NOTHING_LOADED) {
 				try {
 					machine.step();
 				} catch (CodeAccessException e) {
 					JOptionPane.showMessageDialog(frame, 
-						"Illegal access to code from line " + model.getPC() + "\n"
-								+ "Exception message: " + e.getMessage(),
-								"Run time error",
-								JOptionPane.OK_OPTION);
-					System.out.println("Illegal access to code from line " + model.getPC()); // just for debugging
+							"Illegal access to code from line " + machine.getPC() + "\n"
+									+ "Exception message: " + e.getMessage(),
+									"Run time error",
+									JOptionPane.OK_OPTION);
+					System.out.println("Illegal access to code from line " + machine.getPC()); // just for debugging
 					System.out.println("Exception message: " + e.getMessage()); // just for debugging			
 				} catch(ArrayIndexOutOfBoundsException e) {
 					// similar JOPtionPane
-		// YOU HAVE TO FILL OUT ALL THESE CATCH BLOCKS WITH DIFFERENT MESSAGES
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
+					JOptionPane.showMessageDialog(frame, 
+							"Pointing out of bounds at line " + machine.getPC() + "\n"
+									+ "Exception message: " + e.getMessage(),
+									"Run time error",
+									JOptionPane.OK_OPTION);
 				} catch(NullPointerException e) {
 					// similar JOPtionPane
+					JOptionPane.showMessageDialog(frame, 
+							"Pointing to a null object at line " + machine.getPC() + "\n"
+									+ "Exception message: " + e.getMessage(),
+									"Run time error",
+									JOptionPane.OK_OPTION);
 				} catch(ParityCheckException e) {
 					// similar JOPtionPane
+					JOptionPane.showMessageDialog(frame, 
+							"Odd number of 1s at line " + machine.getPC() + "\n"
+									+ "Exception message: " + e.getMessage(),
+									"Run time error",
+									JOptionPane.OK_OPTION);
 				} catch(IllegalInstructionException e) {
 					// similar JOPtionPane
+					JOptionPane.showMessageDialog(frame, 
+							"Illegal instruction being input at line " + machine.getPC() + "\n"
+									+ "Exception message: " + e.getMessage(),
+									"Run time error",
+									JOptionPane.OK_OPTION);
 				} catch(IllegalArgumentException e) {
 					// similar JOPtionPane
+					JOptionPane.showMessageDialog(frame, 
+							"Illegal argument being input at line " + machine.getPC() + "\n"
+									+ "Exception message: " + e.getMessage(),
+									"Run time error",
+									JOptionPane.OK_OPTION);
 				} catch(DivideByZeroException e) {
 					// similar JOPtionPane
+					JOptionPane.showMessageDialog(frame, 
+							"Attempted division by zero at line " + machine.getPC() + "\n"
+									+ "Exception message: " + e.getMessage(),
+									"Run time error",
+									JOptionPane.OK_OPTION);
 				}
-				notify("");
 			}
+			notify("");
 		}
-		
+
 		public Machine getMachine() {
 			return machine;
 		}
@@ -174,11 +195,11 @@ public enum States {
 		public JFrame getFrame() {
 			return frame;
 		}
-		
+
 		public States getCurrentState() {
 			return currentState;
 		}
-		
+
 		public void setCurrentState(States s) {
 			if(s == States.PROGRAM_HALTED) tUnit.setAutoStepOn(false);		
 			currentState = s;
@@ -213,7 +234,7 @@ public enum States {
 			clear();
 			ioUnit.finalLoad_ReloadStep();
 		}
-		
+
 		public void exit() { // method executed when user exits the program
 			int decision = JOptionPane.showConfirmDialog(
 					frame, "Do you really wish to exit?",
@@ -225,7 +246,7 @@ public enum States {
 
 		public void setPeriod(int value)
 		{
-			tUnit.setPeriod(value)
+			tUnit.setPeriod(value);
 		}
 
 		private void notify(String str)
@@ -236,12 +257,12 @@ public enum States {
 			memoryViewPanel2.update(str);
 			memoryViewPanel3.update(str);
 		}
-		
+
 		public void assembleFile()
 		{
 			ioUnit.assembleFile();
 		}
-		
+
 		public void loadFile()
 		{
 			ioUnit.loadFile();
@@ -249,14 +270,15 @@ public enum States {
 
 		private void createAndShowGUI()
 		{
-			tUnit = new TimerUnit(this);
+			//removed this from argument for timerunit and controlpanel
+			tUnit = new TimerUnit();
 			ioUnit = new IOUnit(this);
 			ioUnit.initialize();
 			codeViewPanel = new CodeViewPanel(machine);
 			memoryViewPanel1 = new MemoryViewPanel(machine, 0, 160);
 			memoryViewPanel2 = new MemoryViewPanel(machine, 160, Memory.DATA_SIZE/2);
 			memoryViewPanel3 = new MemoryViewPanel(machine, Memory.DATA_SIZE/2, Memory.DATA_SIZE);
-			controlPanel = new ControlPanel(this);
+			controlPanel = new ControlPanel();
 			processorPanel = new ProcessorViewPanel(machine);
 			menuBuilder = new MenuBarBuilder(this);
 			frame = new JFrame("Simulator");
@@ -284,10 +306,24 @@ public enum States {
 			frame.addWindowListener(WindowListenerFactory.windowClosingFactory(e -> exit()));
 			frame.setLocationRelativeTo(null);
 			tUnit.start();
-			currentState().enter();
+			//edited currentState to getcurrentstate
+			getCurrentState().enter();
 			frame.setVisible(true);
 			notify("");
 		}
+		
+		/*public void main(String[] args) {
+			Machine machine = new Machine(() -> System.exit(0));
+			MemoryViewPanel panel = new MemoryViewPanel(machine, 0, 500);
+			JFrame frame = new JFrame("TEST");
+			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			frame.setSize(400, 700);
+			frame.setLocationRelativeTo(null);
+			frame.add(panel.createMemoryDisplay());
+			frame.setVisible(true);
+			System.out.println(Loader.load(machine, new File("test.pexe")));
+			panel.update("");
+		}*/
 	}
 
 	/*	
