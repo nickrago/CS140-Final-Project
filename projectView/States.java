@@ -3,6 +3,7 @@ package projectview;
 import javax.swing.JFrame;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.Rectangle;
 import java.io.File;
@@ -11,6 +12,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
@@ -18,8 +21,12 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
+import project.DivideByZeroException;
+import project.IllegalInstructionException;
 //import project.Loader;
 import project.Machine;
+import project.Memory;
+import project.ParityCheckException;
 
 public enum States {
 	AUTO_STEPPING {
@@ -105,7 +112,59 @@ public enum States {
 	{
 		private Machine machine;
 		private JFrame frame;
-		public void step() {}
+		private TimerUnit tUnit;
+		private CodeViewPanel codeViewPanel;
+		private MemoryViewPanel memoryViewPanel;
+		private MemoryViewPanel memoryViewPanel1;
+		private MemoryViewPanel memoryViewPanel2;
+		private MemoryViewPanel memoryViewPanel3;
+		private ControlPanel controlPanel;
+		private ProcessorViewPanel processorPanel;
+		private States currentState = States.NOTHING_LOADED;
+		private IOUnit ioUnit;
+		private MenuBarBuilder menuBuilder;
+
+		public void step() { 
+			if (currentState != States.PROGRAM_HALTED && 
+					currentState != States.NOTHING_LOADED) {
+				try {
+					machine.step();
+				} catch (CodeAccessException e) {
+					JOptionPane.showMessageDialog(frame, 
+						"Illegal access to code from line " + model.getPC() + "\n"
+								+ "Exception message: " + e.getMessage(),
+								"Run time error",
+								JOptionPane.OK_OPTION);
+					System.out.println("Illegal access to code from line " + model.getPC()); // just for debugging
+					System.out.println("Exception message: " + e.getMessage()); // just for debugging			
+				} catch(ArrayIndexOutOfBoundsException e) {
+					// similar JOPtionPane
+		// YOU HAVE TO FILL OUT ALL THESE CATCH BLOCKS WITH DIFFERENT MESSAGES
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				} catch(NullPointerException e) {
+					// similar JOPtionPane
+				} catch(ParityCheckException e) {
+					// similar JOPtionPane
+				} catch(IllegalInstructionException e) {
+					// similar JOPtionPane
+				} catch(IllegalArgumentException e) {
+					// similar JOPtionPane
+				} catch(DivideByZeroException e) {
+					// similar JOPtionPane
+				}
+				notify("");
+			}
+		}
+		
 		public Machine getMachine() {
 			return machine;
 		}
@@ -114,98 +173,126 @@ public enum States {
 		}
 		public JFrame getFrame() {
 			return frame;
-		};
-	}
-
-	public class MemoryViewPanel
-	{
-		private Machine machine; // import from project
-		private JScrollPane scroller; // import from javax.swing
-		private JTextField[] dataHex; // import from javax.swing
-		private JTextField[] dataDecimal; // import from javax.swing
-		private int lower = -1;
-		private int upper = -1;
-		private int previousColor = -1;
-
-		public MemoryViewPanel(Machine m, int low, int up) {
-			machine = m;
-			lower = low;
-			upper = up;
+		}
+		
+		public States getCurrentState() {
+			return currentState;
+		}
+		
+		public void setCurrentState(States s) {
+			if(s == States.PROGRAM_HALTED) tUnit.setAutoStepOn(false);		
+			currentState = s;
+			s.enter();
+			notify("");
 		}
 
-		public JComponent createMemoryDisplay()
+		public void clear() {
+			machine.clear();
+			setCurrentState(States.NOTHING_LOADED);
+			currentState.enter();
+			notify("Clear");
+		}
+
+		public void makeReady(String s) {
+			tUnit.setAutoStepOn(false);
+			setCurrentState(States.PROGRAM_LOADED_NOT_AUTOSTEPPING);
+			currentState.enter();
+			notify(s);
+		}
+
+		public void toggleAutoStep()
 		{
-			JPanel panel = new JPanel();
-			panel.setLayout(new BorderLayout());
-			Border border = BorderFactory.createTitledBorder(
-					BorderFactory.createLineBorder(Color.BLACK),
-					"Data Memory View ["+ lower +"-"+ upper +"]",
-					TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION);
-			panel.setBorder(border);
-			JPanel innerPanel = new JPanel();
-			innerPanel.setLayout(new BorderLayout());
-			innerPanel.setBorder(border);
-			JPanel numPanel = new JPanel();
-			JPanel decimalPanel = new JPanel();
-			JPanel hexPanel = new JPanel();
-			numPanel.setLayout(new GridLayout(0, 1));
-			innerPanel.add(numPanel, BorderLayout.LINE_START);
-			innerPanel.add(decimalPanel, BorderLayout.CENTER); 
-			innerPanel.add(hexPanel, BorderLayout.LINE_END);
-			JTextField[] dataHex = new JTextField[upper - lower];
-			JTextField[] dataDecimal = new JTextField[upper - lower];
-			for(int i = lower; i < upper; i++)
-			{
-				numPanel.add(new JLabel(i+": ", JLabel.RIGHT));
-				dataDecimal[i - lower] = new JTextField(10);
-				dataHex[i-lower] = new JTextField(10);
-				decimalPanel.add(dataDecimal[i-lower]); 
-				hexPanel.add(dataHex[i-lower]);
-			}
-			scroller =new JScrollPane(innerPanel);
-			panel.add(scroller);
-			return panel;
+			tUnit.toggleAutoStep();
+			if(tUnit.isAutoStepOn()) setCurrentState(States.AUTO_STEPPING);
+			else setCurrentState(States.PROGRAM_LOADED_NOT_AUTOSTEPPING);
 		}
-		public void update(String str) {
-			for(int i = lower; i < upper; i++) {
-				int val = machine.getData(i);
-				dataDecimal[i-lower].setText("" + val);
-				String s = Integer.toHexString(val);
-				if(val < 0)
-					s = "-" + Integer.toHexString(-val);
-				dataHex[i-lower].setText(s.toUpperCase());
+
+		public void reload()
+		{
+			tUnit.setAutoStepOn(false);
+			clear();
+			ioUnit.finalLoad_ReloadStep();
+		}
+		
+		public void exit() { // method executed when user exits the program
+			int decision = JOptionPane.showConfirmDialog(
+					frame, "Do you really wish to exit?",
+					"Confirmation", JOptionPane.YES_NO_OPTION);
+			if (decision == JOptionPane.YES_OPTION) {
+				System.exit(0);
 			}
-			if("Clear".equals(str)) {
-				if(lower <= previousColor && previousColor < upper) {
-					dataDecimal[previousColor-lower].setBackground(Color.WHITE);
-					dataHex[previousColor-lower].setBackground(Color.WHITE);
-					previousColor = -1;
-				}
-			} else {
-				if(previousColor  >= lower && previousColor < upper) {
-					dataDecimal[previousColor-lower].setBackground(Color.WHITE);
-					dataHex[previousColor-lower].setBackground(Color.WHITE);
-				}
-				previousColor = machine.getChangedDataIndex();
-				if(previousColor  >= lower && previousColor < upper) {
-					dataDecimal[previousColor-lower].setBackground(Color.YELLOW);
-					dataHex[previousColor-lower].setBackground(Color.YELLOW);
-				} 
-			}
-			if(scroller != null && machine != null) {
-				JScrollBar bar= scroller.getVerticalScrollBar();
-				if (machine.getChangedDataIndex() >= lower &&
-						machine.getChangedDataIndex() < upper &&
-						// the following just checks createMemoryDisplay has run
-						dataDecimal != null) {
-					Rectangle bounds = dataDecimal[machine.getChangedDataIndex()-lower].getBounds();
-					bar.setValue(Math.max(0, bounds.y - 15*bounds.height));
-				}
-			}
+		}
+
+		public void setPeriod(int value)
+		{
+			tUnit.setPeriod(value)
+		}
+
+		private void notify(String str)
+		{
+			//probably a typo, if not then call update(str) on codeViewPanel
+			memoryViewPanel.update(str);
+			memoryViewPanel1.update(str);
+			memoryViewPanel2.update(str);
+			memoryViewPanel3.update(str);
+		}
+		
+		public void assembleFile()
+		{
+			ioUnit.assembleFile();
+		}
+		
+		public void loadFile()
+		{
+			ioUnit.loadFile();
+		}
+
+		private void createAndShowGUI()
+		{
+			tUnit = new TimerUnit(this);
+			ioUnit = new IOUnit(this);
+			ioUnit.initialize();
+			codeViewPanel = new CodeViewPanel(machine);
+			memoryViewPanel1 = new MemoryViewPanel(machine, 0, 160);
+			memoryViewPanel2 = new MemoryViewPanel(machine, 160, Memory.DATA_SIZE/2);
+			memoryViewPanel3 = new MemoryViewPanel(machine, Memory.DATA_SIZE/2, Memory.DATA_SIZE);
+			controlPanel = new ControlPanel(this);
+			processorPanel = new ProcessorViewPanel(machine);
+			menuBuilder = new MenuBarBuilder(this);
+			frame = new JFrame("Simulator");
+			JMenuBar bar = new JMenuBar();
+			frame.setJMenuBar(bar);
+			bar.add(menuBuilder.createFileMenu());
+			bar.add(menuBuilder.createExecuteMenu());
+
+			Container content = frame.getContentPane(); 
+			content.setLayout(new BorderLayout(1,1));
+			content.setBackground(Color.BLACK);
+			frame.setSize(1200,600);
+			frame.add(codeViewPanel.createCodeDisplay(), BorderLayout.LINE_START);
+			frame.add(processorPanel.createProcessorDisplay(),BorderLayout.PAGE_START);
+			JPanel center = new JPanel();
+			center.setLayout(new GridLayout(1,3));
+			center.add(memoryViewPanel1.createMemoryDisplay());
+			center.add(memoryViewPanel2.createMemoryDisplay());
+			center.add(memoryViewPanel3.createMemoryDisplay());
+			frame.add(center, BorderLayout.CENTER);
+			frame.add(controlPanel.createControlDisplay(), BorderLayout.PAGE_END);
+			// the next line will be commented or deleted later
+			//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+			frame.addWindowListener(WindowListenerFactory.windowClosingFactory(e -> exit()));
+			frame.setLocationRelativeTo(null);
+			tUnit.start();
+			currentState().enter();
+			frame.setVisible(true);
+			notify("");
 		}
 	}
 
-	/*	public static void main(String[] args) {
+	/*	
+	  	Tester1
+	 	public static void main(String[] args) {
 		Machine machine = new Machine(() -> System.exit(0));
 		MemoryViewPanel panel = new MemoryViewPanel(machine, 0, 500);
 		JFrame frame = new JFrame("TEST");
@@ -217,4 +304,20 @@ public enum States {
 		System.out.println(Loader.load(machine, new File("test.pexe")));
 		panel.update("");
 	}*/
+
+	/*
+	 	public static void main(String[] args) {
+			javax.swing.SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					Mediator mediator = new Mediator();
+					Machine machine = 
+					new Machine(() -> 
+					mediator.setCurrentState(States.PROGRAM_HALTED));
+			mediator.setMachine(machine); //<<<<<CORRECTION
+			mediator.createAndShowGUI();
+		}
+	});
+}
+
+	 */
 }
