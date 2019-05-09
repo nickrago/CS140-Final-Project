@@ -96,6 +96,8 @@ public class Machine {
 			Instruction.checkParity(instr);
 			ACTION.get(instr.opcode/8).accept(instr);
 		} catch (Exception e) {
+			halt();
+			throw e;
 			// e.printStackTrace();
 		}
 	}
@@ -114,7 +116,10 @@ public class Machine {
 		
 		ACTION.put(OPCODES.get("HALT"), instr -> {
 			int flags = instr.opcode & 6;
-			if(flags != 0) throw new IllegalInstructionException("Value for addressing is invalid");
+			if(flags != 0) {
+				String fString = "(" + (flags%8 > 3?"1":"0") + (flags%4 > 1?"1":"0") + ")";
+				throw new IllegalInstructionException("Illegal flags for this instruction: " + fString);
+			}
 			halt();
 		});
 		
@@ -160,6 +165,7 @@ public class Machine {
 				String fString = "(" + (flags%8 > 3?"1":"0") + (flags%4 > 1?"1":"0") + ")";
 				throw new IllegalInstructionException("Illegal flags for this instruction: " + fString);
 			}
+			cpu.pc++;
 		});
 		
 		ACTION.put(OPCODES.get("STO"), instr -> {
@@ -172,11 +178,15 @@ public class Machine {
 				String fString = "(" + (flags%8 > 3?"1":"0") + (flags%4 > 1?"1":"0") + ")";
 				throw new IllegalInstructionException("Illegal flags for this instruction: " + fString);
 			}
+			cpu.pc++;
 		});
 		
 		ACTION.put(OPCODES.get("NOT"), instr -> {
 			int flags = instr.opcode & 6;
-			if(flags != 0) throw new IllegalInstructionException("Value for addressing is invalid");
+			if(flags != 0) {
+				String fString = "(" + (flags%8 > 3?"1":"0") + (flags%4 > 1?"1":"0") + ")";
+				throw new IllegalInstructionException("Illegal flags for this instruction: " + fString);
+			}
 			if(cpu.accum == 0) cpu.accum = 1; 
 			else cpu.accum = 0;
 			cpu.pc++;

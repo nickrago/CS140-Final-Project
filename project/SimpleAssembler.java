@@ -84,8 +84,8 @@ public class SimpleAssembler implements Assembler{
 				out.writeInt(instr.opcode);
 				out.writeInt(instr.arg);
 				out.writeInt(-1);
-				out.close();
 			}
+			out.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

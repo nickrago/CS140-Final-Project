@@ -32,7 +32,7 @@ public class Memory {
 	}
 	
 	void setData(int index, int value) {
-		if(!(0 <= index && index < DATA_SIZE)) {
+		if((0 <= index && index < DATA_SIZE)) {
 			data[index] = value;
 			changedDataIndex = index;
 		}
@@ -61,7 +61,7 @@ public class Memory {
 	}
 	
 	void setCode(int index, Instruction instr) {
-		if(0 <= index && index < code.size()) throw new CodeAccessException("Illegal Access to Code");
+		if(!(0 <= index && index < code.size())) throw new CodeAccessException("Illegal Access to Code");
 		code.set(index, instr);
 	}
 	
