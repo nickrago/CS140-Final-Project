@@ -83,7 +83,12 @@ public class SimpleAssembler implements Assembler{
 			{
 				out.writeInt(instr.opcode);
 				out.writeInt(instr.arg);
-				out.writeInt(-1);
+			}
+			out.writeInt(-1);
+			for(DataPair pair: outputData)
+			{
+				out.writeInt(pair.address);
+				out.writeInt(pair.value);
 			}
 			out.close();
 		} catch (FileNotFoundException e) {

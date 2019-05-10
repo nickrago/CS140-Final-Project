@@ -17,16 +17,18 @@ public class Loader {
 			while(true) {
 				int x = input.readInt();
 				if(readingCode && (x == -1)) readingCode = false;
-				else {
-					if(readingCode) {
+				else if(readingCode){
 						numInstr++;
-						machine.addCode(new Instruction((byte)x, input.readInt()));
-					} else {
-						machine.setData(x, input.readInt());
-					}
-				}	
-			}
-		} catch (EOFException e) {
+						int y = input.readInt();
+						machine.addCode(new Instruction((byte)x, y));
+				} 
+				else {
+						int z = input.readInt();
+						machine.setData(x, z);
+				}
+			}	
+		}
+		catch (EOFException e) {
 			return "" + numInstr;
 		} catch (FileNotFoundException e1) {
 			return("File " + file.getName() + " Not Found");
@@ -40,17 +42,20 @@ public class Loader {
 		Machine machine = new Machine(() -> System.exit(0));
 		int str = Integer.parseInt(Loader.load(machine, new File("factorial.pexe")));
 		
+		/*
 		for(int i = 0; i<str; i++) {
 			System.out.println(machine.getCode(i).getText());
-			System.out.println(Arrays.toString(machine.getData(0,20)));
 		}
-		/*
+		
+		System.out.println(Arrays.toString(machine.getData(0,20)));
+		 */
+		
 		machine.setPC(0);
 		while(true) {
 			System.out.println(machine.getCode(machine.getPC()).getText());
 			machine.step();
 			System.out.println(Arrays.toString(machine.getData(0,20)));
 		}
-		*/
+
 	}
 }
