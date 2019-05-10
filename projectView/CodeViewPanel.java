@@ -9,7 +9,6 @@ import java.io.File;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
@@ -61,11 +60,13 @@ public class CodeViewPanel {
 		panel.setBorder(border);
 		JPanel innerPanel = new JPanel();
 		innerPanel.setLayout(new BorderLayout());
-		innerPanel.setBorder(border);
+		//innerPanel.setBorder(border);
 		JPanel numPanel = new JPanel();
 		JPanel textPanel = new JPanel();
 		JPanel hexPanel = new JPanel();
 		numPanel.setLayout(new GridLayout(0, 1));
+		textPanel.setLayout(new GridLayout(0, 1));
+		hexPanel.setLayout(new GridLayout(0, 1));
 		// not sure if this should be here innerPanel.add(numPanel, BorderLayout.LINE_START);
 		innerPanel.add(textPanel, BorderLayout.CENTER); 
 		innerPanel.add(hexPanel, BorderLayout.LINE_END);

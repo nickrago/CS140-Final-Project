@@ -44,11 +44,13 @@ public class MemoryViewPanel
 		panel.setBorder(border);
 		JPanel innerPanel = new JPanel();
 		innerPanel.setLayout(new BorderLayout());
-		innerPanel.setBorder(border);
+		//innerPanel.setBorder(border);
 		JPanel numPanel = new JPanel();
 		JPanel decimalPanel = new JPanel();
 		JPanel hexPanel = new JPanel();
 		numPanel.setLayout(new GridLayout(0, 1));
+		decimalPanel.setLayout(new GridLayout(0, 1));
+		hexPanel.setLayout(new GridLayout(0, 1));
 		innerPanel.add(numPanel, BorderLayout.LINE_START);
 		innerPanel.add(decimalPanel, BorderLayout.CENTER); 
 		innerPanel.add(hexPanel, BorderLayout.LINE_END);
@@ -62,7 +64,7 @@ public class MemoryViewPanel
 			decimalPanel.add(dataDecimal[i-lower]); 
 			hexPanel.add(dataHex[i-lower]);
 		}
-		scroller =new JScrollPane(innerPanel);
+		scroller = new JScrollPane(innerPanel);
 		panel.add(scroller);
 		return panel;
 	}

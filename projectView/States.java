@@ -5,27 +5,15 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.GridLayout;
-import java.awt.Rectangle;
-import java.io.File;
 
-import javax.swing.BorderFactory;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
+
 
 import project.CodeAccessException;
 import project.DivideByZeroException;
 import project.IllegalInstructionException;
-import project.Loader;
-//import project.Loader;
 import project.Machine;
 import project.Memory;
 import project.ParityCheckException;
@@ -268,7 +256,7 @@ public enum States {
 			ioUnit.loadFile();
 		}
 
-		private void createAndShowGUI()
+		void createAndShowGUI()
 		{
 			//removed this from argument for timerunit and controlpanel
 			tUnit = new TimerUnit();
@@ -326,8 +314,10 @@ public enum States {
 		}*/
 	}
 
-	/*	
-	  	Tester1
+		
+	  	//Tester1
+	  	
+	  	/*
 	 	public static void main(String[] args) {
 		Machine machine = new Machine(() -> System.exit(0));
 		MemoryViewPanel panel = new MemoryViewPanel(machine, 0, 500);
@@ -337,9 +327,13 @@ public enum States {
 		frame.setLocationRelativeTo(null);
 		frame.add(panel.createMemoryDisplay());
 		frame.setVisible(true);
+		try {
 		System.out.println(Loader.load(machine, new File("test.pexe")));
+		}
+		catch (Exception e) {System.out.println("exception");}
 		panel.update("");
-	}*/
+	}
+	 	*/
 
 	/*
 	 	public static void main(String[] args) {

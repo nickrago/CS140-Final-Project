@@ -6,7 +6,6 @@ import javax.swing.JMenu;
 
 import projectview.States.Mediator;
 
-import java.awt.Event;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
