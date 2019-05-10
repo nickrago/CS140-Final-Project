@@ -294,18 +294,21 @@ public class FullAssembler implements Assembler {
 			//otherwise, we have the right number of values. 
 			//we just need to see if they are both hexadecimal
 			else {
-				//TODO: similar to what we did in the code error checking,
-				//if parts[0] is not hexadecimal report an error: "data has non-numeric memory address" and update retVal.
-				if() {
-					error.append("Error on line " + lineNum + ": data has non-numeric memory address");
-					retVal = lineNum;
+				try {
+					Integer.parseInt(parts[0],16); // test arg is in hex, base 16
 				}
+				catch(NumberFormatException e) {
+					error.append("Error on line " + lineNum + ": data has non-numeric memory address");
+					retVal = lineNum;				
+				}
+					
 
-				//TODO: similar to what we did in the code error checking,
-				//if parts[1] is not hexadecimal report an error: "data has non-numeric memory value" and update retVal.
-				if() {
-					error.append("Error on line " + lineNum + ": data has non-numeric memory value");
-					retVal = lineNum;
+				try {
+					Integer.parseInt(parts[1],16); // test arg is in hex, base 16
+				}
+				catch(NumberFormatException e) {
+					error.append("Error on line " + lineNum + ": data has non-numeric memory address");
+					retVal = lineNum;				
 				}
 			}
 		}
