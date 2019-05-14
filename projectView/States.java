@@ -227,9 +227,7 @@ public enum States {
 			int decision = JOptionPane.showConfirmDialog(
 					frame, "Do you really wish to exit?",
 					"Confirmation", JOptionPane.YES_NO_OPTION);
-			if (decision == JOptionPane.YES_OPTION) {
-				System.exit(0);
-			}
+			if (decision == JOptionPane.YES_OPTION) System.exit(0);
 		}
 
 		public void setPeriod(int value)
@@ -244,6 +242,9 @@ public enum States {
 			memoryViewPanel1.update(str);
 			memoryViewPanel2.update(str);
 			memoryViewPanel3.update(str);
+			
+			//testing to see if this works
+			//codeViewPanel.update(str);
 		}
 
 		public void assembleFile()
@@ -317,7 +318,7 @@ public enum States {
 		
 	  	//Tester1
 	  	
-	  	/*
+	  	
 	 	public static void main(String[] args) {
 		Machine machine = new Machine(() -> System.exit(0));
 		MemoryViewPanel panel = new MemoryViewPanel(machine, 0, 500);
@@ -333,7 +334,7 @@ public enum States {
 		catch (Exception e) {System.out.println("exception");}
 		panel.update("");
 	}
-	 	*/
+	 	
 
 	/*
 	 	public static void main(String[] args) {
