@@ -15,15 +15,13 @@ public class BasicTester {
 		System.out.println("Acc: " + machine.getAccum() + ", PC: " + machine.getPC());
 		System.out.println(Arrays.toString(machine.getData(0,20)));
 
-		
 		instr = new Instruction((byte)0b00001001,0);
 		Instruction.checkParity(instr);
 		machine.ACTION.get(instr.opcode/8).accept(instr);
 		System.out.println("NOT");
 		System.out.println("Acc: " + machine.getAccum() + ", PC: " + machine.getPC());
 		System.out.println(Arrays.toString(machine.getData(0,20)));
-		
-		
+
 		instr = new Instruction((byte)0b00010001,0);
 		Instruction.checkParity(instr);
 		machine.ACTION.get(instr.opcode/8).accept(instr);
@@ -148,7 +146,6 @@ public class BasicTester {
 		System.out.println("Acc: " + machine.getAccum() + ", PC: " + machine.getPC());
 		System.out.println(Arrays.toString(machine.getData(0,20)));
 
-		System.out.println("error here");
 		instr = new Instruction((byte)0b00110000,3);
 		Instruction.checkParity(instr);
 		machine.ACTION.get(instr.opcode/8).accept(instr);
