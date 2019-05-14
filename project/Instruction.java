@@ -37,8 +37,8 @@ public class Instruction {
 	);
 	public static final Set<String> JMP_MNEMONICS = Set.of("JUMP", "JMPZ");
 	public static final Set<String> NO_ARG_MNEMONICS = Set.of("NOP", "NOT", "HALT"); 
-	public static final Set<String> IND_MNEMONICS = Set.of("STO", "CMPL", "CMPZ");
-	public static final Set<String> IMM_MNEMONICS = Set.of("LOD", "ADD", "SUB", "MUL", "DIV", "AND");
+	public static final Set<String> IND_MNEMONICS = Set.of("LOD", "ADD", "SUB", "MUL", "DIV", "STO", "JUMP", "JMPZ");
+	public static final Set<String> IMM_MNEMONICS = Set.of("LOD", "ADD", "SUB", "MUL", "DIV", "AND", "JUMP", "JMPZ");
 	
 	public String getText() {
 		StringBuilder build = new StringBuilder();

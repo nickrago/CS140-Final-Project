@@ -71,9 +71,7 @@ public class FullAssembler implements Assembler {
 				//TODO: check if we are considering a blank line
 				//you should trim the line of leading or trailing white space, using the trim() method
 				//after you do that, you can consider the length of the string
-				if(line.trim().length() != 0) {
-					blankLineFound = true;
-					firstBlankLineNum = lineNum;
+				if(line.trim().length() == 0) {
 					if(!blankLineFound) {
 						blankLineFound = true;
 						firstBlankLineNum = lineNum;
@@ -86,7 +84,7 @@ public class FullAssembler implements Assembler {
 					//note that we will not report consecutive blank lines, just the first illegal blank line. 
 					//we will consider this acceptable behavior.
 					if(blankLineFound) {
-						error.append("Error on line " + firstBlankLineNum + ": Illegal blank line in the source file");
+						error.append("Error on line " + firstBlankLineNum + ": Illegal blank line in the source file\n");
 						retVal = firstBlankLineNum;
 						blankLineFound = false;
 					} 
@@ -274,7 +272,6 @@ public class FullAssembler implements Assembler {
 			//Similar to what we did for code, we want to continue passed blank lines
 			//BUT additionally we also want to skip passed lines that hold DATA delimiters
 			if(line.length() == 0 || line.toUpperCase().trim().equals("DATA")) continue;
-
 			String[] parts = line.split("\\s+");
 			
 			//make sure 2 data entries are present.
