@@ -54,8 +54,8 @@ public class MemoryViewPanel
 		innerPanel.add(numPanel, BorderLayout.LINE_START);
 		innerPanel.add(decimalPanel, BorderLayout.CENTER); 
 		innerPanel.add(hexPanel, BorderLayout.LINE_END);
-		JTextField[] dataHex = new JTextField[upper - lower];
-		JTextField[] dataDecimal = new JTextField[upper - lower];
+		dataHex = new JTextField[upper - lower];
+		dataDecimal = new JTextField[upper - lower];
 		for(int i = lower; i < upper; i++)
 		{
 			numPanel.add(new JLabel(i+": ", JLabel.RIGHT));
