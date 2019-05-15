@@ -216,7 +216,7 @@ public class FullAssembler implements Assembler {
 						if(parts[1].charAt(0) == 'M') {
 							//if there is an 'M' but the mnemonic is not contained in the IMM_MNEMONIC set from the Instruction class
 							//then we have an error
-							if(!Instruction.IMM_MNEMONICS.contains(parts[0].toUpperCase())) {
+							if(!Instruction.IMM_IND_MNEMONICS.contains(parts[0].toUpperCase())) {
 								error.append("Error on line " + lineNum + 
 										": this mnemonic does not allow immediate mode\n");
 								retVal = lineNum;
