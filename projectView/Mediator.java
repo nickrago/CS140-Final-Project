@@ -232,15 +232,14 @@ public class Mediator {
 	private void createAndShowGUI()
 	{
 		//removed this from argument for timerunit and controlpanel
-		Mediator mediator = new Mediator();
-		tUnit = new TimerUnit();
+		tUnit = new TimerUnit(this);
 		ioUnit = new IOUnit(this);
 		ioUnit.initialize();
 		codeViewPanel = new CodeViewPanel(machine);
 		memoryViewPanel1 = new MemoryViewPanel(machine, 0, 160);
 		memoryViewPanel2 = new MemoryViewPanel(machine, 160, Memory.DATA_SIZE/2);
 		memoryViewPanel3 = new MemoryViewPanel(machine, Memory.DATA_SIZE/2, Memory.DATA_SIZE);
-		controlPanel = new ControlPanel(mediator);
+		controlPanel = new ControlPanel(this);
 		processorPanel = new ProcessorViewPanel(machine);
 		menuBuilder = new MenuBarBuilder(this);
 		frame = new JFrame("Simulator");

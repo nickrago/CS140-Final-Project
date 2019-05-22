@@ -11,6 +11,11 @@ public class TimerUnit {
 	private Timer timer;
 	private Mediator mediator;
 
+	public TimerUnit(Mediator med)
+	{
+		mediator = med;
+	}
+	
 	boolean isAutoStepOn() {
 		return autoStepOn;
 	}

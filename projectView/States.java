@@ -34,11 +34,11 @@ public enum States {
 	{
 		public void enter(){
 			states[ASSEMBLE] = false;
-			states[CLEAR] = false;
+			states[CLEAR] = true;
 			states[LOAD] = false;
-			states[RELOAD] = false;
-			states[RUN] = true;
-			states[RUNNING] = true;
+			states[RELOAD] = true;
+			states[RUN] = false;
+			states[RUNNING] = false;
 			states[STEP] = false;
 		}
 	}, 
