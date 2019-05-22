@@ -23,10 +23,10 @@ public enum States {
 		public void enter(){
 			states[ASSEMBLE] = false;
 			states[CLEAR] = false;
-			states[LOAD] = false;
+			states[LOAD] = true;
 			states[RELOAD] = false;
-			states[RUN] = true;
-			states[RUNNING] = true;
+			states[RUN] = false;
+			states[RUNNING] = false;
 			states[STEP] = false;
 		}
 	}, 
@@ -45,13 +45,13 @@ public enum States {
 	PROGRAM_LOADED_NOT_AUTOSTEPPING
 	{
 		public void enter(){
-			states[ASSEMBLE] = false;
-			states[CLEAR] = false;
-			states[LOAD] = false;
-			states[RELOAD] = false;
+			states[ASSEMBLE] = true;
+			states[CLEAR] = true;
+			states[LOAD] = true;
+			states[RELOAD] = true;
 			states[RUN] = true;
-			states[RUNNING] = true;
-			states[STEP] = false;
+			states[RUNNING] = false;
+			states[STEP] = true;
 		}
 	};
 	private static final int ASSEMBLE = 0;

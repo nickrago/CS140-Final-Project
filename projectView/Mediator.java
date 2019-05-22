@@ -152,6 +152,25 @@ public class Mediator {
 		notify("");
 	}
 	
+	public void reload()
+	{
+		tUnit.setAutoStepOn(false);
+		clear();
+		ioUnit.finalLoad_ReloadStep();
+	}
+	
+	public void toggleAutoStep()
+	{
+		tUnit.toggleAutoStep();
+		if(tUnit.isAutoStepOn())
+		{
+			setCurrentState(States.AUTO_STEPPING);
+		}
+		else {
+			setCurrentState(States.PROGRAM_LOADED_NOT_AUTOSTEPPING);
+		}
+	}
+	
 	public Machine getMachine() {
 		return machine;
 	}
@@ -217,11 +236,11 @@ public class Mediator {
 		tUnit = new TimerUnit();
 		ioUnit = new IOUnit(this);
 		ioUnit.initialize();
-		codeViewPanel = new CodeViewPanel(mediator);
+		codeViewPanel = new CodeViewPanel(machine);
 		memoryViewPanel1 = new MemoryViewPanel(machine, 0, 160);
 		memoryViewPanel2 = new MemoryViewPanel(machine, 160, Memory.DATA_SIZE/2);
 		memoryViewPanel3 = new MemoryViewPanel(machine, Memory.DATA_SIZE/2, Memory.DATA_SIZE);
-		controlPanel = new ControlPanel();
+		controlPanel = new ControlPanel(mediator);
 		processorPanel = new ProcessorViewPanel(machine);
 		menuBuilder = new MenuBarBuilder(this);
 		frame = new JFrame("Simulator");

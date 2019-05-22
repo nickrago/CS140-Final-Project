@@ -17,6 +17,11 @@ public class ControlPanel {
 	private JButton clearButton = new JButton("Clear");
 	private JButton runButton = new JButton("Run/Pause");
 	private JButton reloadButton = new JButton("Reload");
+	
+	public ControlPanel(Mediator m)
+	{
+		mediator = m;
+	}
 
 	public JComponent createControlDisplay()
 	{
@@ -28,10 +33,10 @@ public class ControlPanel {
 		clearButton.addActionListener(e -> mediator.clear());
 		panel.add(clearButton);
 		runButton.setBackground(Color.WHITE);
-		runButton.addActionListener(e -> mediator.step());
+		runButton.addActionListener(e -> mediator.toggleAutoStep());
 		panel.add(runButton);
 		reloadButton.setBackground(Color.WHITE);
-		reloadButton.addActionListener(e -> mediator.step());
+		reloadButton.addActionListener(e -> mediator.reload());
 		panel.add(reloadButton);
 		JSlider slider = new JSlider(5,1000);
 		slider.addChangeListener(e -> mediator.setPeriod(slider.getValue())); 
