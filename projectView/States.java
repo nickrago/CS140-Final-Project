@@ -1,24 +1,10 @@
 package projectview;
 
 import javax.swing.JFrame;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.GridLayout;
 import java.io.File;
 
-import javax.swing.JMenuBar;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-
-
-import project.CodeAccessException;
-import project.DivideByZeroException;
-import project.IllegalInstructionException;
 import project.Loader;
 import project.Machine;
-import project.Memory;
-import project.ParityCheckException;
 
 public enum States {
 	AUTO_STEPPING {

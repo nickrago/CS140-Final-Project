@@ -53,11 +53,11 @@ public class MenuBarBuilder {
 	public JMenu createExecuteMenu()
 	{
 		JMenu menu = new JMenu("Execute");
-		menu.setMnemonic(KeyEvent.VK_E);
+		menu.setMnemonic(KeyEvent.VK_G);
 		go.setMnemonic(KeyEvent.VK_G);
 		go.setAccelerator(KeyStroke.getKeyStroke(
 				KeyEvent.VK_G, ActionEvent.CTRL_MASK));
-		go.addActionListener(e -> mediator.assembleFile());
+		go.addActionListener(e -> mediator.execute());
 		menu.add(go);
 		return menu;
 	}

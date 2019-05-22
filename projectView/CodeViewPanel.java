@@ -25,6 +25,7 @@ import project.Loader;
 public class CodeViewPanel {
 
 	private Machine machine;
+	private Mediator mediator;
 	private Instruction instr;
 	private JScrollPane scroller;
 	private JTextField[] codeText = new JTextField[Memory.CODE_SIZE];
@@ -34,6 +35,11 @@ public class CodeViewPanel {
 	public CodeViewPanel(Machine m)
 	{
 		machine = m;
+	}
+	
+	public CodeViewPanel(Mediator m)
+	{
+		mediator = m;
 	}
 	
 	public static void main(String[] args) throws Exception {

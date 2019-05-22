@@ -31,9 +31,8 @@ public class Mediator {
 	private IOUnit ioUnit;
 	private MenuBarBuilder menuBuilder;
 	
-	
 	public void step() { 
-		while (currentState != States.PROGRAM_HALTED && 
+		if (currentState != States.PROGRAM_HALTED && 
 				currentState != States.NOTHING_LOADED) {
 			try {
 				machine.step();
@@ -88,9 +87,71 @@ public class Mediator {
 								"Run time error",
 								JOptionPane.OK_OPTION);
 			}
+			notify("");
+		}
+	}
+	
+	public void execute()
+	{
+		while (currentState != States.PROGRAM_HALTED && 
+				currentState != States.NOTHING_LOADED) {
+			try {
+				machine.step();
+			} catch (CodeAccessException e) {
+				JOptionPane.showMessageDialog(frame, 
+						"Illegal access to code from line " + machine.getPC() + "\n"
+								+ "Exception message: " + e.getMessage(),
+								"Run time error",
+								JOptionPane.OK_OPTION);
+				System.out.println("Illegal access to code from line " + machine.getPC()); // just for debugging
+				System.out.println("Exception message: " + e.getMessage()); // just for debugging			
+			} catch(ArrayIndexOutOfBoundsException e) {
+				// similar JOPtionPane
+				JOptionPane.showMessageDialog(frame, 
+						"Pointing out of bounds at line " + machine.getPC() + "\n"
+								+ "Exception message: " + e.getMessage(),
+								"Run time error",
+								JOptionPane.OK_OPTION);
+			} catch(NullPointerException e) {
+				// similar JOPtionPane
+				JOptionPane.showMessageDialog(frame, 
+						"Pointing to a null object at line " + machine.getPC() + "\n"
+								+ "Exception message: " + e.getMessage(),
+								"Run time error",
+								JOptionPane.OK_OPTION);
+			} catch(ParityCheckException e) {
+				// similar JOPtionPane
+				JOptionPane.showMessageDialog(frame, 
+						"Odd number of 1s at line " + machine.getPC() + "\n"
+								+ "Exception message: " + e.getMessage(),
+								"Run time error",
+								JOptionPane.OK_OPTION);
+			} catch(IllegalInstructionException e) {
+				// similar JOPtionPane
+				JOptionPane.showMessageDialog(frame, 
+						"Illegal instruction being input at line " + machine.getPC() + "\n"
+								+ "Exception message: " + e.getMessage(),
+								"Run time error",
+								JOptionPane.OK_OPTION);
+			} catch(IllegalArgumentException e) {
+				// similar JOPtionPane
+				JOptionPane.showMessageDialog(frame, 
+						"Illegal argument being input at line " + machine.getPC() + "\n"
+								+ "Exception message: " + e.getMessage(),
+								"Run time error",
+								JOptionPane.OK_OPTION);
+			} catch(DivideByZeroException e) {
+				// similar JOPtionPane
+				JOptionPane.showMessageDialog(frame, 
+						"Attempted division by zero at line " + machine.getPC() + "\n"
+								+ "Exception message: " + e.getMessage(),
+								"Run time error",
+								JOptionPane.OK_OPTION);
+		}
 		}
 		notify("");
 	}
+	
 	public Machine getMachine() {
 		return machine;
 	}
@@ -152,10 +213,11 @@ public class Mediator {
 	private void createAndShowGUI()
 	{
 		//removed this from argument for timerunit and controlpanel
+		Mediator mediator = new Mediator();
 		tUnit = new TimerUnit();
 		ioUnit = new IOUnit(this);
 		ioUnit.initialize();
-		codeViewPanel = new CodeViewPanel(machine);
+		codeViewPanel = new CodeViewPanel(mediator);
 		memoryViewPanel1 = new MemoryViewPanel(machine, 0, 160);
 		memoryViewPanel2 = new MemoryViewPanel(machine, 160, Memory.DATA_SIZE/2);
 		memoryViewPanel3 = new MemoryViewPanel(machine, Memory.DATA_SIZE/2, Memory.DATA_SIZE);
