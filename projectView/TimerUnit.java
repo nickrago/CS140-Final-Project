@@ -2,7 +2,7 @@ package projectview;
 
 import javax.swing.Timer;
 
-import projectview.States.Mediator;
+import projectview.Mediator;
 
 public class TimerUnit {
 

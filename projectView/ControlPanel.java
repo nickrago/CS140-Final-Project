@@ -8,7 +8,7 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 
-import projectview.States.Mediator;
+import projectview.Mediator;
 
 public class ControlPanel {
 

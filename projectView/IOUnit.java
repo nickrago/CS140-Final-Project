@@ -14,7 +14,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import project.Assembler;
 import project.Loader;
 import project.Machine;
-import projectview.States.Mediator;
+import projectview.Mediator;
 import project.FullAssembler;
 
 public class IOUnit {

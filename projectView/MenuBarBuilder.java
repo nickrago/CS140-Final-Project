@@ -4,7 +4,7 @@ import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.JMenu;
 
-import projectview.States.Mediator;
+import projectview.Mediator;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
