@@ -33,10 +33,10 @@ public class Memory {
 	
 	void setData(int index, int value) {
 		if(!(0 <= index && index < DATA_SIZE)) {
-			data[index] = value;
-			changedDataIndex = index;
+			throw new DataAccessException("Illegal acces to data at index " + index);
 		}
-		
+		data[index] = value;
+		changedDataIndex = index;
 	}
 	
 	void clearData() {
